@@ -15,12 +15,14 @@
 
   var startX,
     startY,
-    isMoving = false;
+    isMoving = false,
+    endY;
 
   function onTouchEnd() {
     this.removeEventListener('touchmove', onTouchMove);
     this.removeEventListener('touchend', onTouchEnd);
     isMoving = false;
+    $(this).trigger('endSwiping', endY); // ben - publish event
   }
 
   function onTouchMove(e) {
@@ -35,10 +37,13 @@
         dir = dx > 0 ? 'left' : 'right'
       }
       else if(Math.abs(dy) >= $.detectSwipe.threshold) {
-        dir = dy > 0 ? 'down' : 'up'
+        dir = dy > 0 ? 'down' : 'up';
+        $(this).trigger('keepSwiping',dy); // ben - publish event
+        endY = dy; // ben - update global
       }
+
       if(dir) {
-        onTouchEnd.call(this);
+        // onTouchEnd.call(this); // ben - keep listening
         $(this).trigger('swipe', dir).trigger('swipe' + dir);
       }
     }
@@ -51,11 +56,12 @@
       isMoving = true;
       this.addEventListener('touchmove', onTouchMove, false);
       this.addEventListener('touchend', onTouchEnd, false);
+      $(this).trigger('startSwiping'); // ben - publish event
     }
   }
 
   function setup() {
-    this.addEventListener && this.addEventListener('touchstart', onTouchStart, false);
+    this.addEventListener('touchstart', onTouchStart, false);
   }
 
   function teardown() {
