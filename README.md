@@ -21,3 +21,11 @@ Global setting:
 
     $.detectSwipe.threshold // The number of pixels your finger must move to trigger a swipe event.  Defaults is 20.
     $.detectSwipe.preventDefault // Should touchmove events be prevented?  Defaults to true.
+
+Changes
+----------
+#### [2.1.2] - 2015-11-27
+##### Added
+- Updated to trigger events during a swipe and when swipe starts and ends. 
+- Ignore when swipe direction changes.
+
